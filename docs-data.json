@@ -1,0 +1,22 @@
+[
+  {
+    "id": "getting-started",
+    "title": "Getting Started",
+    "content": "<p>Follow these simple steps to resize your images:</p><ol class='list-decimal ml-5 mb-4'><li>Click the upload area or drag & drop your image file</li><li>Use the crop tool to select the desired area</li><li>Enter width and height dimensions</li><li>Select unit (pixels, inches, mm, cm)</li><li>Choose output format (JPG, PNG, WebP)</li><li>Adjust quality slider if needed</li><li>Click 'Process Image' and then 'Download Resized Image'</li></ol>"
+  },
+  {
+    "id": "units-explained",
+    "title": "Understanding Measurement Units",
+    "content": "<h3>Pixels (PX)</h3><p>The basic unit of digital images. Most common for web use.</p><h3>Inch</h3><p>Physical measurement. 1 inch at 300 DPI = 300 pixels.</p><h3>Millimeter (MM)</h3><p>Metric unit. 25.4mm = 1 inch. Requires DPI conversion.</p><h3>Centimeter (CM)</h3><p>Metric unit. 1cm = 10mm. 2.54cm = 1 inch.</p>"
+  },
+  {
+    "id": "format-guide",
+    "title": "Output Format Guide",
+    "content": "<h3>JPG</h3><p>Best for photographs. Smaller file sizes with quality control.</p><h3>PNG</h3><p>Lossless format. Supports transparency. Larger file sizes.</p><h3>WebP</h3><p>Modern format. Superior compression. Best for web use.</p>"
+  },
+  {
+    "id": "quality-compression",
+    "title": "Quality and Compression",
+    "content": "<h3>Quality Slider</h3><p>Adjusts output quality (10-100%). Higher quality = larger files.</p><h3>Target Size</h3><p>Enter target size in KB. Tool automatically adjusts quality to meet it.</p><h3>Recommendations</h3><ul><li>Web photos: 60-80% quality</li><li>Print photos: 85-100% quality</li><li>Document uploads: Use target size if specified</li></ul>"
+  }
+]

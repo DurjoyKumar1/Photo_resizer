@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Documentation - Photo Resizer Tool guides and tutorials.">
+    <title>Documentation - Photo Resizer Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <style>
+        .doc-content h2 { margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1.25rem; font-weight: 600; }
+        .doc-content h3 { margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.125rem; font-weight: 600; }
+        .doc-content p { margin-bottom: 0.75rem; }
+        .doc-content ul { margin-bottom: 0.75rem; padding-left: 1.5rem; }
+        .doc-content li { margin-bottom: 0.25rem; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="bg-white border-b border-gray-200 py-2">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="h-12 flex items-center justify-center">
+                <a href="index.html" class="text-xl font-bold text-primary">Photo Resizer Tool</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex flex-wrap gap-4 text-sm">
+                <a href="index.html" class="text-gray-600 hover:text-primary">Home</a>
+                <a href="about.html" class="text-gray-600 hover:text-primary">About Us</a>
+                <a href="privacy.html" class="text-gray-600 hover:text-primary">Privacy Policy</a>
+                <a href="terms.html" class="text-gray-600 hover:text-primary">Terms & Conditions</a>
+                <a href="disclaimer.html" class="text-gray-600 hover:text-primary">Disclaimer</a>
+                <a href="contact.html" class="text-gray-600 hover:text-primary">Contact Us</a>
+                <a href="docs.html" class="text-primary font-medium">Documentation</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-8">
+        <article class="bg-white border border-gray-200 rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Documentation</h1>
+            
+            <div id="doc-content" class="doc-content text-gray-600">
+                <p>Loading documentation...</p>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-4">
+        <div class="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
+            <p>&copy; 2026 Photo Resizer Tool. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load documentation from JSON file
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('docs-data.json');
+                if (response.ok) {
+                    const docs = await response.json();
+                    let html = '';
+                    
+                    docs.forEach(doc => {
+                        html += `<h2>${doc.title}</h2>`;
+                        if (doc.content) {
+                            html += doc.content;
+                        }
+                    });
+                    
+                    document.getElementById('doc-content').innerHTML = html;
+                } else {
+                    // Default content
+                    document.getElementById('doc-content').innerHTML = `
+                        <h2>Getting Started</h2>
+                        <p>Welcome to Photo Resizer Tool documentation. Follow these steps to resize your images:</p>
+                        <ol class="list-decimal ml-5 mb-4">
+                            <li>Click the upload area or drag & drop your image file</li>
+                            <li>Use the crop tool to select the desired area</li>
+                            <li>Enter width and height dimensions</li>
+                            <li>Select unit (pixels, inches, mm, cm)</li>
+                            <li>Choose output format (JPG, PNG, WebP)</li>
+                            <li>Adjust quality slider if needed</li>
+                            <li>Click "Process Image" and then "Download"</li>
+                        </ol>
+                        
+                        <h2>Understanding Units</h2>
+                        <ul>
+                            <li><strong>Pixels (PX)</strong> - The basic unit of digital images</li>
+                            <li><strong>Inch</strong> - Physical measurement, requires DPI setting</li>
+                            <li><strong>Millimeter (MM)</strong> - Metric unit, requires DPI setting</li>
+                            <li><strong>Centimeter (CM)</strong> - Metric unit, requires DPI setting</li>
+                        </ul>
+                        
+                        <h2>Format Guide</h2>
+                        <ul>
+                            <li><strong>JPG</strong> - Best for photos, smaller file sizes</li>
+                            <li><strong>PNG</strong> - Best for graphics with transparency</li>
+                            <li><strong>WebP</strong> - Modern format, best compression</li>
+                        </ul>
+                    `;
+                }
+            } catch (e) {
+                document.getElementById('doc-content').innerHTML = `
+                    <h2>Using Photo Resizer Tool</h2>
+                    <p>1. Upload an image by clicking or drag & drop</p>
+                    <p>2. Set your desired dimensions and format</p>
+                    <p>3. Process and download the resized image</p>
+                    <p><a href="index.html" class="text-primary">Return to tool</a></p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

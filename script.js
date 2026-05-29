@@ -11,7 +11,9 @@ const elements = {
     dropZone: document.getElementById('drop-zone'),
     fileInput: document.getElementById('file-input'),
     previewImage: document.getElementById('preview-image'),
+    previewContainer: document.getElementById('preview-container'),
     uploadPrompt: document.getElementById('upload-prompt'),
+    closePreviewBtn: document.getElementById('close-preview'),
     widthInput: document.getElementById('width-input'),
     heightInput: document.getElementById('height-input'),
     unitSelect: document.getElementById('unit-select'),
@@ -28,7 +30,10 @@ const elements = {
     seoDescription: document.getElementById('seo-description'),
     resultInfo: document.getElementById('result-info'),
     fileSizeInfo: document.getElementById('file-size-info'),
-    downloadSuccess: document.getElementById('download-success')
+    downloadSuccess: document.getElementById('download-success'),
+    zoomSlider: document.getElementById('zoom-slider'),
+    zoomValue: document.getElementById('zoom-value'),
+    presetBtns: document.querySelectorAll('.preset-btn')
 };
 
 // Initialize on DOM ready
@@ -46,17 +51,39 @@ function initializeTool() {
 // Setup all event listeners
 function setupEventListeners() {
     // File upload events
-    elements.dropZone.addEventListener('click', () => elements.fileInput.click());
+    elements.dropZone.addEventListener('click', () => {
+        if (originalImage) return;
+        elements.fileInput.click();
+    });
     elements.fileInput.addEventListener('change', handleFileSelect);
     elements.dropZone.addEventListener('dragover', handleDragOver);
     elements.dropZone.addEventListener('dragleave', handleDragLeave);
     elements.dropZone.addEventListener('drop', handleDrop);
+    
+    // Close preview button
+    elements.closePreviewBtn.addEventListener('click', closePreview);
 
     // Control events
     elements.qualitySlider.addEventListener('input', updateQualityDisplay);
+    elements.zoomSlider.addEventListener('input', handleZoomChange);
     elements.processBtn.addEventListener('click', processImage);
     elements.downloadBtn.addEventListener('click', downloadImage);
     elements.resetBtn.addEventListener('click', resetTool);
+
+    // Quick preset buttons
+    elements.presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const w = btn.getAttribute('data-width');
+            const h = btn.getAttribute('data-height');
+            const u = btn.getAttribute('data-unit');
+            const t = btn.getAttribute('data-target');
+            
+            elements.widthInput.value = w;
+            elements.heightInput.value = h;
+            if (u) elements.unitSelect.value = u;
+            if (t) elements.targetSize.value = t;
+        });
+    });
 
     // Auto-process when target size changes
     elements.targetSize.addEventListener('change', () => {
@@ -69,6 +96,16 @@ function setupEventListeners() {
 // Update quality slider display
 function updateQualityDisplay() {
     elements.qualityValue.textContent = elements.qualitySlider.value;
+}
+
+// Update zoom slider display and apply to cropper
+function handleZoomChange() {
+    const zoom = elements.zoomSlider.value;
+    elements.zoomValue.textContent = zoom;
+    
+    if (cropper) {
+        cropper.zoomTo(zoom / 100);
+    }
 }
 
 // Handle file selection
@@ -106,6 +143,7 @@ function loadImage(file) {
     reader.onload = (event) => {
         elements.previewImage.src = event.target.result;
         elements.previewImage.classList.remove('hidden');
+        elements.previewContainer.classList.remove('hidden');
         elements.uploadPrompt.classList.add('hidden');
         originalImage = new Image();
         originalImage.onload = () => {
@@ -151,7 +189,7 @@ function enableProcessButton() {
 }
 
 // Process image with current settings
-function processImage() {
+async function processImage() {
     if (!originalImage || !cropper) return;
 
     const canvas = document.createElement('canvas');
@@ -183,51 +221,55 @@ function processImage() {
     // Get target size for compression
     const targetKB = elements.targetSize.value ? parseInt(elements.targetSize.value) : null;
     let quality = parseInt(elements.qualitySlider.value) / 100;
+    const mimeType = `image/${elements.formatSelect.value}`;
 
     // Function to compress and check size
-    function compressAndCheck(qualityVal) {
+    function compressToBlob(qualityVal) {
         return new Promise((resolve) => {
             canvas.toBlob((blob) => {
-                resolve({ blob, quality: qualityVal });
-            }, `image/${elements.formatSelect.value}`, qualityVal);
+                resolve(blob);
+            }, mimeType, qualityVal);
         });
     }
 
-    // If target size specified, adjust quality to meet it
-    async function processWithSizeControl() {
-        let blob = await compressAndCheck(quality);
+    // Process with size control if target specified
+    let blob = await compressToBlob(quality);
+    
+    if (!blob) {
+        console.error('Canvas toBlob returned null - image may be tainted');
+        elements.fileSizeInfo.textContent = 'Error: Could not process image. Try a different image file.';
+        return;
+    }
+    
+    if (targetKB && blob) {
+        let currentKB = blob.size / 1024;
         
-        if (targetKB) {
-            const currentKB = blob.size / 1024;
-            
-            if (currentKB > targetKB) {
-                // Binary search for optimal quality
-                let low = 0.05, high = 0.95;
-                while (low <= high) {
-                    const mid = (low + high) / 2;
-                    blob = await compressAndCheck(mid);
-                    const midKB = blob.size / 1024;
-                    
-                    if (Math.abs(midKB - targetKB) < 5) break;
-                    
-                    if (midKB > targetKB) {
-                        high = mid - 0.05;
-                    } else {
-                        low = mid + 0.05;
-                    }
+        if (currentKB > targetKB) {
+            // Binary search for optimal quality
+            let low = 0.05, high = 0.95;
+            while (low <= high) {
+                const mid = (low + high) / 2;
+                blob = await compressToBlob(mid);
+                if (!blob) break;
+                currentKB = blob.size / 1024;
+                
+                if (Math.abs(currentKB - targetKB) < 5) break;
+                
+                if (currentKB > targetKB) {
+                    high = mid - 0.05;
+                } else {
+                    low = mid + 0.05;
                 }
             }
         }
-        
-        return blob;
     }
 
-    processWithSizeControl().then(blob => {
+    if (blob) {
         processedImageBlob = blob;
         elements.downloadBtn.disabled = false;
         elements.resultInfo.classList.remove('hidden');
         elements.fileSizeInfo.textContent = `Processed size: ${(blob.size / 1024).toFixed(1)} KB (${width}x${height}px)`;
-    });
+    }
 }
 
 // Get dimensions converted to pixels
@@ -269,12 +311,10 @@ function downloadImage() {
         'png': 'png',
         'webp': 'webp'
     };
-    const ext = formatMap[format] || format;
-    
-    // Create download URL
-    const url = URL.createObjectURL(processedImageBlob);
+    const ext = formatMap[format] || 'jpg';
     
     try {
+        const url = URL.createObjectURL(processedImageBlob);
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
@@ -283,26 +323,25 @@ function downloadImage() {
         a.click();
         
         // Show success message on mobile
-        elements.downloadSuccess.classList.remove('hidden');
-        setTimeout(() => {
-            elements.downloadSuccess.classList.add('hidden');
-        }, 3000);
+        if (elements.downloadSuccess) {
+            elements.downloadSuccess.classList.remove('hidden');
+            setTimeout(() => {
+                elements.downloadSuccess.classList.add('hidden');
+            }, 3000);
+        }
         
-        // Clean up after short delay
+        // Clean up
         setTimeout(() => {
-            if (document.body.contains(a)) {
-                document.body.removeChild(a);
-            }
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }, 100);
     } catch (error) {
-        // Fallback: open in new tab
-        window.open(url, '_blank');
+        alert('Download failed. Please try again.');
     }
 }
 
-// Reset tool to initial state
-function resetTool() {
+// Close preview image
+function closePreview() {
     if (cropper) {
         cropper.destroy();
         cropper = null;
@@ -310,6 +349,7 @@ function resetTool() {
     
     elements.previewImage.src = '';
     elements.previewImage.classList.add('hidden');
+    elements.previewContainer.classList.add('hidden');
     elements.uploadPrompt.classList.remove('hidden');
     elements.fileInput.value = '';
     elements.processBtn.disabled = true;
@@ -317,6 +357,11 @@ function resetTool() {
     elements.resultInfo.classList.add('hidden');
     processedImageBlob = null;
     originalImage = null;
+}
+
+// Reset tool to initial state
+function resetTool() {
+    closePreview();
 }
 
 // Load SEO content based on URL parameter
