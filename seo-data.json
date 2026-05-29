@@ -1,0 +1,82 @@
+[
+  {
+    "id": "us-visa",
+    "title": "US Visa Photo Size Converter Online - Free 2x2 Inch Tool",
+    "h1": "Free US Visa Photo Resizer (2x2 Inch)",
+    "width": 2,
+    "height": 2,
+    "unit": "inch",
+    "dpi": 300,
+    "description": "Convert your photo to official US Visa size online instantly. Our tool resizes and crops images to 2x2 inches (600x600 pixels at 300 DPI) and supports JPG, PNG, and WebP formats. Perfect for passport photos, visa applications, and ID photos.",
+    "meta_desc": "Online US Visa photo size converter. Crop and resize your image to 2x2 inches automatically. Free tool supporting JPG, PNG, WebP formats.",
+    "blog": "<h3>What is DPI for Photo Resizing?</h3><p>DPI (Dots Per Inch) determines how many pixels are printed per inch. For digital photos like US Visa, 300 DPI is standard (2 inches = 600x600 pixels). Higher DPI gives sharper prints but larger file sizes.</p><h3>US Visa Photo Requirements</h3><ul><li>Dimensions: Exactly 2x2 inches (51x51 mm)</li><li>Resolution: 300 DPI minimum</li><li>Format: JPG or PNG</li><li>Background: Plain white or off-white</li><li>Recent photo within last 6 months</li></ul>"
+  },
+  {
+    "id": "bd-job",
+    "title": "BD Job Photo Resizer 300x300 KB Online - Government Jobs",
+    "h1": "Government Job Photo Resizer (300x300 px, Under 100KB)",
+    "width": 300,
+    "height": 300,
+    "unit": "px",
+    "targetSize": 100,
+    "description": "Resize your photo for BD government job applications to 300x300 pixels under 100KB. This tool automatically compresses your image to meet the strict file size requirements for Bangladeshi government jobs and university admissions.",
+    "meta_desc": "Official 300x300 px photo resizer for Bangladeshi government jobs and university admissions. Compress images under 100KB for free.",
+    "blog": "<h3>Understanding File Size Optimization</h3><p>For Bangladeshi government applications, photos must be exactly 300x300 pixels and under 100KB. Our tool automatically adjusts quality to meet this requirement while maintaining clarity.</p><h3>Why File Size Matters</h3><p>Many online application portals reject large files. Lower quality (60-70%) often reduces file size significantly while keeping photos acceptable for official documents.</p>"
+  },
+  {
+    "id": "passport-photo",
+    "title": "Passport Photo Resizer - 2x2 inch or 35x45 mm Tool",
+    "h1": "Passport Photo Resizer (2x2 inch / 35x45 mm)",
+    "width": 2,
+    "height": 2,
+    "unit": "inch",
+    "dpi": 300,
+    "description": "Create passport photos with our free online resizer. Supports both 2x2 inch and 35x45 mm dimensions. Perfect for international travel documents, ID cards, and visa applications.",
+    "meta_desc": "Free passport photo resizer online. Convert photos to 2x2 inch or 35x45 mm for passports, visas, and ID cards.",
+    "blog": "<h3>Passport Photo Guidelines</h3><p>Most countries require passport photos to be 2x2 inches (51x51mm) with specific guidelines:</p><ul><li>Neutral facial expression</li><li>Plain light-colored background</li><li>No glasses or headwear (religious exceptions)</li><li>Full front view, centered face</li><li>Recent photo taken within 6 months</li></ul>"
+  },
+  {
+    "id": "linkedin-profile",
+    "title": "LinkedIn Profile Photo Resizer - Perfect 400x400 px Size",
+    "h1": "LinkedIn Profile Photo Resizer (400x400 px)",
+    "width": 400,
+    "height": 400,
+    "unit": "px",
+    "description": "Optimize your LinkedIn profile picture with the perfect dimensions. Our tool creates a 400x400 pixel image suitable for professional networking profiles and ensures crisp display on all devices.",
+    "meta_desc": "Resize LinkedIn profile photos to 400x400 pixels. Free online tool for professional headshots and profile pictures.",
+    "blog": "<h3>Professional Headshot Tips</h3><p>Your LinkedIn profile photo is your digital first impression. Follow these tips:</p><ul><li>Face should occupy 60-70% of the frame</li><li>Use professional attire</li><li>Good lighting facing forward</li><li>Avoid busy backgrounds</li><li>Smile naturally for approachability</li></ul>"
+  },
+  {
+    "id": "resume-photo",
+    "title": "Resume Photo Resizer - Professional headshot 150x200 px",
+    "h1": "Professional Resume Photo Resizer (150x200 px)",
+    "width": 150,
+    "height": 200,
+    "unit": "px",
+    "description": "Create a professional resume photo with our free resizer. The 150x200 pixel dimension is ideal for most resume templates and ensures your photo looks sharp in job applications.",
+    "meta_desc": "Free resume photo resizer. Create professional 150x200 px headshots for CV and resume applications.",
+    "blog": "<h3>European Resume Photo Standards</h3><p>European CVs often include a professional photo. The 150x200 px format (3:4 ratio) is standard because:</p><ul><li>Maintains aspect ratio on A4 documents</li><li>Small file size for email applications</li><li>Professional appearance in print</li><li>Compatible with most applicant tracking systems</li></ul>"
+  },
+  {
+    "id": "instagram-post",
+    "title": "Instagram Post Photo Resizer - 1080x1080 px Square Tool",
+    "h1": "Instagram Square Post Resizer (1080x1080 px)",
+    "width": 1080,
+    "height": 1080,
+    "unit": "px",
+    "description": "Resize photos for perfect Instagram square posts. Our tool optimizes images to 1080x1080 pixels, the ideal resolution for maximum quality on Instagram feeds.",
+    "meta_desc": "Free Instagram square post resizer. Convert photos to 1080x1080 px for perfect social media posts.",
+    "blog": "<h3>Instagram Image Optimization</h3><p>For best results on Instagram:</p><ul><li>1080x1080 pixels is the maximum display size</li><li>Use 72-90% quality for optimal file size</li><li>Square format works on both mobile and desktop</li><li>Keep important content in center 80% area</li><li>JPG format recommended for photos, PNG for graphics</li></ul>"
+  },
+  {
+    "id": "cv-photo",
+    "title": "CV Photo Resizer - 300x400 px UK/EU Standard Tool",
+    "h1": "CV Photo Resizer (300x400 px)",
+    "width": 300,
+    "height": 400,
+    "unit": "px",
+    "description": "UK and EU standard CV photo resizer. Creates properly sized 300x400 pixel images that meet European job application requirements.",
+    "meta_desc": "Free 300x400 px CV photo resizer for UK and European job applications. Perfect dimensions for resumes.",
+    "blog": "<h3>European CV Photo Requirements</h3><p>In Europe, adding a photo to your CV is common practice. The 300x400 px (3:4 ratio) format works best because:</p><ul><li>Matches standard photo proportions</li><li>Prints clearly on A4 paper</li><li>Maintains quality when scanned</li><li>Fits in right-hand column layouts</li><li>Accepted by most European employers</li></ul>"
+  }
+]

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online photo resizer tool. Resize, crop, and compress images instantly. Supports JPG, PNG, WebP formats. Perfect for visa photos, passport photos, and social media.">
+    <meta name="keywords" content="photo resizer, image resize, image compress, free online tool, visa photo, passport photo">
+    <meta name="author" content="Photo Resizer Tool">
+    <title>Free Photo Resizer - Resize Images Online Instantly</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Cropper.js via CDN (for better image cropping) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    
+    <style>
+        .drop-zone {
+            min-height: 200px;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        .drop-zone.dragover {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+        #preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            cursor: move;
+        }
+        @media (max-width: 768px) {
+            .sidebar-ad {
+                display: none;
+            }
+            .cropper-point, .cropper-line {
+                width: 12px;
+                height: 12px;
+            }
+            .cropper-view-box {
+                outline-width: 2px;
+            }
+        }
+        @media (max-width: 640px) {
+            .tool-controls {
+                grid-template-columns: 1fr !important;
+            }
+            .mobile-btn-stack {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Top AdSense Placeholder -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="bg-gray-100 text-center text-gray-500 text-sm h-20 flex items-center justify-center">
+                AdSense Ad (Top) - Replace with actual ad code
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-6 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar AdSense Placeholder -->
+            <aside class="sidebar-ad hidden lg:block lg:col-span-1">
+                <div class="bg-white border border-gray-200 rounded-lg p-4 sticky top-6">
+                    <div class="bg-gray-100 text-center text-gray-500 text-sm h-96 flex items-center justify-center">
+                        AdSense Ad (Sidebar)
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Tool -->
+            <div class="lg:col-span-3">
+                <article class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                    <h1 id="tool-title" class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+                        Free Photo Resizer - Resize Images Online
+                    </h1>
+                    <p class="text-gray-600 mb-4">
+                        Upload your image, set dimensions, and download resized photo instantly. All processing is done in your browser.
+                    </p>
+
+                    <!-- Upload Zone -->
+                    <div id="drop-zone" class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer bg-gray-50 mb-6">
+                        <input type="file" id="file-input" accept="image/*" class="hidden">
+                        <div id="upload-prompt" class="text-gray-600">
+                            <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88 7.22A4.97 4.97 0 018 17V8m-4 8h16M7 8a4 4 0 00-.88-7.22A4.97 4.97 0 005 8v9a4 4 0 004 4h10"></path>
+                            </svg>
+                            <p class="font-medium mb-1">Click to upload or drag & drop</p>
+                            <p class="text-sm text-gray-500">PNG, JPG, WebP up to 10MB</p>
+                        </div>
+                        <img id="preview-image" src="" alt="Preview" class="hidden mx-auto">
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Width</label>
+                            <input type="number" id="width-input" min="1" value="800" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Height</label>
+                            <input type="number" id="height-input" min="1" value="600" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                            <select id="unit-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="px">Pixels (PX)</option>
+                                <option value="inch">Inch</option>
+                                <option value="mm">Millimeter (MM)</option>
+                                <option value="cm">Centimeter (CM)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">DPI</label>
+                            <input type="number" id="dpi-input" min="72" max="600" value="300" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Output Format</label>
+                            <select id="format-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="jpeg">JPG</option>
+                                <option value="png">PNG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Quality: <span id="quality-value">85</span>%</label>
+                            <input type="range" id="quality-slider" min="10" max="100" value="85" class="w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Target Size (optional)</label>
+                            <input type="number" id="target-size" min="10" max="5000" placeholder="e.g., 100 KB" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="process-btn" disabled class="flex-1 bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            Process Image
+                        </button>
+                        <button id="download-btn" disabled class="flex-1 bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            Download Resized Image
+                        </button>
+                        <button id="reset-btn" class="px-4 py-3 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition">
+                            Reset
+                        </button>
+                    </div>
+
+                    <!-- Result Info -->
+                    <div id="result-info" class="hidden mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800">
+                        <span id="file-size-info"></span>
+                    </div>
+                    
+                    <!-- Download Success Message (Mobile) -->
+                    <div id="download-success" class="hidden mt-2 text-center text-sm text-green-600">
+                        Image processed! Tap Download to save.
+                    </div>
+                </article>
+
+                <!-- SEO Content Article (Blog Content) -->
+                <article id="seo-content" class="bg-white border border-gray-200 rounded-lg p-6 hidden">
+                    <h2 class="text-xl font-bold text-gray-800 mb-3">About This Tool</h2>
+                    <div id="seo-description" class="text-gray-600 leading-relaxed"></div>
+                </article>
+
+                <!-- Blog Section for SEO -->
+                <section class="bg-white border border-gray-200 rounded-lg p-6 mt-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Photo Resizing Tips & Guides</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <div>
+                            <h3 class="font-semibold text-gray-800 mb-1">How to Resize Photos for Documents</h3>
+                            <p class="text-sm">When preparing photos for official documents like passports, visas, or job applications, always resize to the exact pixel dimensions required. Use our preset tools for common document sizes.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 mb-1">Understanding Image Quality</h3>
+                            <p class="text-sm">Higher quality settings (85-100%) preserve more detail but increase file size. For web uploads with size limits, use 60-80% quality to maintain good quality while reducing file size.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800 mb-1">Supported Formats</h3>
+                            <p class="text-sm">JPG is best for photos with many colors. PNG supports transparency and is lossless. WebP provides the best compression but has limited support in older software.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Links for SEO Pages -->
+                <section class="bg-white border border-gray-200 rounded-lg p-6 mt-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Popular Photo Sizes</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <a href="index.html?tool=us-visa" class="text-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                            <div class="font-medium text-primary">US Visa</div>
+                            <div class="text-xs text-gray-500">2x2 inch</div>
+                        </a>
+                        <a href="index.html?tool=bd-job" class="text-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                            <div class="font-medium text-primary">BD Job</div>
+                            <div class="text-xs text-gray-500">300x300 px</div>
+                        </a>
+                        <a href="index.html?tool=passport-photo" class="text-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                            <div class="font-medium text-primary">Passport</div>
+                            <div class="text-xs text-gray-500">2x2 inch</div>
+                        </a>
+                        <a href="index.html?tool=instagram-post" class="text-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                            <div class="font-medium text-primary">Instagram</div>
+                            <div class="text-xs text-gray-500">1080x1080 px</div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="bg-white border border-gray-200 rounded-lg p-6 mt-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Features</h2>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-600">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>100% Free - No watermarks or limits</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Client-side processing - Your images stay private</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Multiple formats: JPG, PNG, WebP</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Pixel and physical units (inch, mm, cm)</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom AdSense Placeholder -->
+    <div class="bg-white border-t border-gray-200 py-2">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="bg-gray-100 text-center text-gray-500 text-sm h-24 flex items-center justify-center">
+                AdSense Ad (Bottom) - Replace with actual ad code
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
